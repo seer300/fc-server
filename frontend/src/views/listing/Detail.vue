@@ -44,6 +44,48 @@ function goEdit() {
 function goCommunity() {
   if (detail.value?.community_id) router.push(`/community/${detail.value.community_id}`)
 }
+
+// ---------- 长按/点击复制分享链接 ----------
+let pressTimer = null
+let longPressed = false
+
+async function copyShareUrl() {
+  const text = detail.value?.share_url
+  if (!text) return
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.style.position = 'fixed'
+      ta.style.opacity = '0'
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
+    }
+    showToast('链接已复制')
+  } catch (e) {
+    showToast('复制失败，请手动复制')
+  }
+}
+
+function onPressStart() {
+  longPressed = false
+  clearTimeout(pressTimer)
+  pressTimer = setTimeout(() => {
+    longPressed = true
+    copyShareUrl()
+  }, 600)
+}
+function onPressEnd() {
+  clearTimeout(pressTimer)
+}
+function onCellClick() {
+  if (!longPressed) copyShareUrl()
+  longPressed = false
+}
 async function del() {
   await showConfirmDialog({ title: '确认删除', message: '删除该房源及其照片？' })
   await api.delete(`/api/listing/${route.params.id}`)
@@ -65,9 +107,20 @@ async function onRemove(photoId) {
 
     <!-- 分享链接 -->
     <van-cell-group inset v-if="detail.share_url">
-      <van-cell title="APP分享链接" is-link @click="window.open(detail.share_url, '_blank')">
+      <van-cell
+        title="APP分享链接"
+        clickable
+        @pointerdown="onPressStart"
+        @pointerup="onPressEnd"
+        @pointerleave="onPressEnd"
+        @pointercancel="onPressEnd"
+        @click="onCellClick"
+      >
         <template #label>
           <span class="share-url">{{ detail.share_url }}</span>
+        </template>
+        <template #value>
+          <span class="copy-hint">长按/点击复制</span>
         </template>
       </van-cell>
     </van-cell-group>
@@ -113,6 +166,10 @@ async function onRemove(photoId) {
 <style scoped>
 .share-url {
   color: #1989fa;
+  font-size: 12px;
+}
+.copy-hint {
+  color: #969799;
   font-size: 12px;
 }
 .section {

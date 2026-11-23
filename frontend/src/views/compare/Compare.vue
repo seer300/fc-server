@@ -23,13 +23,13 @@ const selected = computed(() =>
 )
 
 const labelMap = computed(() => {
-  const m = { district: '区域', address: '地址' }
+  const m = { district: '区域' }
   fields.value.forEach((f) => (m[f.field_key] = f.field_label))
   return m
 })
 
 const allKeys = computed(() => {
-  const keys = new Set(['district', 'address'])
+  const keys = new Set(['district'])
   fields.value.forEach((f) => keys.add(f.field_key))
   selected.value.forEach((c) =>
     Object.keys(c).forEach((k) => {

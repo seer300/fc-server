@@ -87,7 +87,6 @@ async function onRemove(photoId) {
     <!-- 基本信息（固定字段） -->
     <van-cell-group inset title="基本信息">
       <van-cell title="区域" :value="detail.district || '-'" />
-      <van-cell title="地址" :value="detail.address || '-'" />
     </van-cell-group>
 
     <!-- 动态字段 -->

@@ -11,7 +11,7 @@ const filtered = computed(() => {
   const kw = keyword.value.trim()
   if (!kw) return list.value
   return list.value.filter(
-    (c) => (c.name || '').includes(kw) || (c.district || '').includes(kw) || (c.address || '').includes(kw)
+    (c) => (c.name || '').includes(kw) || (c.district || '').includes(kw)
   )
 })
 
@@ -28,7 +28,7 @@ async function load() {
 
 <template>
   <div>
-    <van-search v-model="keyword" placeholder="搜索小区名称/区域/地址" />
+    <van-search v-model="keyword" placeholder="搜索小区名称/区域" />
 
     <van-empty v-if="filtered.length === 0" description="暂无小区" />
 
@@ -45,7 +45,6 @@ async function load() {
         <template #label>
           <div class="card-label">
             <span v-if="c.district">{{ c.district }}</span>
-            <span v-if="c.address">{{ c.address }}</span>
           </div>
           <div class="card-meta">
             <span>📷 {{ c.photo_count || 0 }}</span>

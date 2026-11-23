@@ -52,7 +52,6 @@ async function onRemove(photoId) {
     <van-cell-group inset>
       <van-field v-model="form.name" label="小区名称" required placeholder="请输入小区名称" />
       <van-field v-model="form.district" label="区域" placeholder="如：浦东新区" />
-      <van-field v-model="form.address" label="地址" placeholder="详细地址" />
     </van-cell-group>
 
     <DynamicForm v-model="form" :fields="fields" />
