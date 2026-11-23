@@ -1,0 +1,24 @@
+/* 全局样式 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f7f8fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* 桌面端内容区留出侧边栏宽度 */
+@media (min-width: 768px) {
+  .app-content {
+    margin-left: 220px;
+  }
+}
