@@ -33,6 +33,7 @@ async def upload_file(
     target_type: str = Form(...),
     target_id: str = Form(...),
     caption: str = Form(None),
+    save_record: bool = Form(True),
     file: UploadFile = File(...),
 ):
     data = await file.read()
@@ -59,19 +60,25 @@ async def upload_file(
 
     url = storage.get_url(file_key)
 
-    # 写入照片记录
-    photo = {
-        "target_type": target_type,
-        "target_id": target_id,
+    result_data = {
         "file_key": file_key,
         "url": url,
         "thumb_url": thumb_url,
-        "caption": caption,
-        "sort": 0,
-        "created_at": datetime.now(timezone.utc),
     }
-    result = get_collection("photo").insert_one(photo)
-    photo["id"] = str(result.inserted_id)
-    del photo["_id"]
 
-    return photo
+    # save_record=False 时（如问答照片）只存文件，不写入照片记录集合
+    if save_record:
+        photo = {
+            "target_type": target_type,
+            "target_id": target_id,
+            "file_key": file_key,
+            "url": url,
+            "thumb_url": thumb_url,
+            "caption": caption,
+            "sort": 0,
+            "created_at": datetime.now(timezone.utc),
+        }
+        res = get_collection("photo").insert_one(photo)
+        result_data["id"] = str(res.inserted_id)
+
+    return result_data

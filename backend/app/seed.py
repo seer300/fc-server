@@ -54,6 +54,35 @@ SCORE_CATEGORIES = [
 ]
 
 
+# 问答分类与问题（示例）
+QA_SEED = [
+    {"target_type": "community", "name": "环境类", "sort": 1, "questions": [
+        {"question_text": "小区周边噪音情况？", "options": ["安静", "一般", "较吵", "很吵"]},
+        {"question_text": "垃圾清运是否及时？", "options": ["及时", "一般", "不及时"]},
+        {"question_text": "周边楼栋是否遮挡采光？", "options": ["无遮挡", "轻微", "严重"]},
+    ]},
+    {"target_type": "community", "name": "物业类", "sort": 2, "questions": [
+        {"question_text": "物业响应速度？", "options": ["快", "一般", "慢"]},
+        {"question_text": "门禁安保是否严格？", "options": ["严格", "一般", "松散"]},
+    ]},
+    {"target_type": "listing", "name": "装修类", "sort": 1, "questions": [
+        {"question_text": "墙面是否有渗水痕迹？", "options": ["无", "有", "待确认"]},
+        {"question_text": "地板/瓷砖是否平整？", "options": ["平整", "轻微翘起", "明显问题"]},
+        {"question_text": "门窗是否完好？", "options": ["完好", "轻微问题", "需维修"]},
+    ]},
+    {"target_type": "listing", "name": "电器类", "sort": 2, "questions": [
+        {"question_text": "空调是否正常制冷/制热？", "options": ["正常", "异常", "未测试"]},
+        {"question_text": "热水器类型？", "options": ["燃气", "电", "太阳能", "无"]},
+        {"question_text": "油烟机/燃气灶是否正常？", "options": ["正常", "异常", "未测试"]},
+    ]},
+    {"target_type": "listing", "name": "采光环境类", "sort": 3, "questions": [
+        {"question_text": "白天自然采光如何？", "options": ["充足", "一般", "较差"]},
+        {"question_text": "通风情况？", "options": ["良好", "一般", "差"]},
+        {"question_text": "室内噪音情况？", "options": ["安静", "一般", "吵"]},
+    ]},
+]
+
+
 def init_seed():
     """各集合为空时才写入种子数据，避免覆盖用户已有配置。"""
     ft_col = get_collection("field_template")
@@ -72,6 +101,25 @@ def init_seed():
                     "question_text": q["question_text"],
                     "question_type": "single",
                     "options": q["options"],
+                    "sort": i + 1,
+                    "active": True,
+                })
+
+    # 问答分类与问题
+    qa_cat_col = get_collection("qa_category")
+    qa_q_col = get_collection("qa_question")
+    if qa_cat_col.count_documents({}) == 0:
+        for c in QA_SEED:
+            questions = c.pop("questions", [])
+            target_type = c["target_type"]
+            cat_id = qa_cat_col.insert_one(c).inserted_id
+            for i, q in enumerate(questions):
+                opts = [{"label": o, "value": o} for o in q["options"]]
+                qa_q_col.insert_one({
+                    "category_id": str(cat_id),
+                    "target_type": target_type,
+                    "question_text": q["question_text"],
+                    "options": opts,
                     "sort": i + 1,
                     "active": True,
                 })

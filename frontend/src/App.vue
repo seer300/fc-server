@@ -9,7 +9,7 @@ const menus = [
   { path: '/', title: '首页', icon: 'wap-home-o' },
   { path: '/community', title: '小区', icon: 'location-o' },
   { path: '/compare', title: '对比', icon: 'chart-trending-o' },
-  { path: '/admin/fields', title: '维护', icon: 'setting-o' },
+  { path: '/admin', title: '维护', icon: 'setting-o' },
 ]
 
 const currentTitle = computed(() => route.meta?.title || '房产管理系统')

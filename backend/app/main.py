@@ -13,6 +13,7 @@ from .routers import (
     score,
     field_template,
     question,
+    qa,
     upload,
 )
 
@@ -46,6 +47,7 @@ app.include_router(photo.router, prefix="/api/photo", tags=["照片"])
 app.include_router(score.router, prefix="/api/score", tags=["评分"])
 app.include_router(field_template.router, prefix="/api/field-template", tags=["字段模板"])
 app.include_router(question.router, prefix="/api/question", tags=["评分问题"])
+app.include_router(qa.router, prefix="/api/qa", tags=["问答"])
 app.include_router(upload.router, prefix="/api/upload", tags=["上传"])
 
 

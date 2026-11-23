@@ -38,6 +38,9 @@ const photos = computed(() => detail.value?.photos || [])
 function goScore() {
   router.push(`/community/${route.params.id}/score`)
 }
+function goQa() {
+  router.push(`/community/${route.params.id}/qa`)
+}
 function goNewListing() {
   router.push(`/community/${route.params.id}/listing/new`)
 }
@@ -142,6 +145,7 @@ async function onRemove(photoId) {
     <!-- 操作 -->
     <div class="actions">
       <van-button type="primary" block @click="goScore">评分</van-button>
+      <van-button type="primary" block icon="records" @click="goQa">看房问答</van-button>
       <van-button plain type="primary" block @click="goEdit">编辑</van-button>
       <van-button type="danger" block @click="del">删除</van-button>
     </div>
