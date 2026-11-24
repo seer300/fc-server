@@ -3,6 +3,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showSuccessToast } from 'vant'
 import api from '../../api'
+import { compressImage } from '../../utils/image'
 
 const route = useRoute()
 const router = useRouter()
@@ -73,13 +74,15 @@ function onAnswerConfirm({ selectedOptions }) {
 // ---------- 照片上传（单张） ----------
 async function afterRead(qid, item) {
   item.status = 'uploading'
-  item.message = '上传中...'
+  item.message = '压缩中...'
   try {
+    const file = await compressImage(item.file)
     const formData = new FormData()
-    formData.append('file', item.file)
+    formData.append('file', file, file.name || 'photo.jpg')
     formData.append('target_type', targetType.value)
     formData.append('target_id', targetId.value)
     formData.append('save_record', 'false')
+    item.message = '上传中...'
     const res = await api.post('/api/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
