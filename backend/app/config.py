@@ -15,8 +15,3 @@ MEDIA_ROOT = Path(os.getenv("MEDIA_ROOT", "/home/admin/house-media"))
 # 服务监听
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
-
-# 图片压缩参数
-IMAGE_MAX_SIZE = 2048  # 原图最长边
-THUMB_MAX_SIZE = 400    # 缩略图最长边
-IMAGE_QUALITY = 75
