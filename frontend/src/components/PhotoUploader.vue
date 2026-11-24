@@ -18,12 +18,16 @@ const fileList = ref(
 // 串行队列：多选时逐张上传，避免并发占满带宽导致超时报错
 let uploadChain = Promise.resolve()
 
-function onAfterRead(item) {
-  item.status = 'uploading'
-  item.message = '等待上传...'
-  uploadChain = uploadChain
-    .then(() => doUpload(item))
-    .catch(() => {})
+// Vant 的 after-read 在多选时传入的是数组，单选时是单个对象，这里统一处理
+function onAfterRead(items) {
+  const list = Array.isArray(items) ? items : [items]
+  list.forEach((item) => {
+    item.status = 'uploading'
+    item.message = '等待上传...'
+    uploadChain = uploadChain
+      .then(() => doUpload(item))
+      .catch(() => {})
+  })
 }
 
 async function doUpload(item) {
