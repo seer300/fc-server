@@ -149,9 +149,10 @@ async function onRemove(photoId) {
     </div>
 
     <!-- 备注 -->
-    <van-cell-group v-if="detail.notes" inset title="备注">
-      <van-cell :label="detail.notes" />
-    </van-cell-group>
+    <div v-if="detail.notes" class="section">
+      <div class="section-title">备注</div>
+      <div class="notes-content">{{ detail.notes }}</div>
+    </div>
 
     <!-- 操作 -->
     <div class="actions">
@@ -189,6 +190,17 @@ async function onRemove(photoId) {
   height: 220px;
   object-fit: cover;
   display: block;
+}
+.notes-content {
+  margin: 0 16px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+  color: #323233;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .caption {
   position: absolute;
